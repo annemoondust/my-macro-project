@@ -8,9 +8,10 @@ This repository contains my work for the Keio Quantitative Macroeconomics course
 ## About Me
 
 Matsumoto Yui, a 4th year graduate.
-Mandolin, film, badminton, french.
-Passed the CPA examination, but failed the interview with audit firm.
-I wish to study economics.
+ECONOMICS
+MANDOLIN
+CINEMA
+MINECRAFT
 
 ## Couse Topics
 - Buisiness Cycles
