@@ -1,0 +1,25 @@
+
+import pandas as pd
+import pandas_datareader.data as web
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+import pandas_datareader as pdr
+import numpy as np
+
+start_date = '1955-01-01'
+end_date = '2022-01-01'
+
+gdp = web.DataReader('JPNRGDPEXP', 'fred', start_date, end_date)
+log_gdp = np.log(gdp)
+
+cycle, trend_1600 = sm.tsa.filters.hpfilter(log_gdp, lamb=1600)
+cycle, trend_100 = sm.tsa.filters.hpfilter(log_gdp, lamb=100)
+cycle, trend_10 = sm.tsa.filters.hpfilter(log_gdp, lamb=10)
+
+plt.plot(trend_1600, label="Trend_1600")
+plt.plot(trend_100, label="Trend_100")
+plt.plot(trend_10, label="Trend_10")
+
+plt.legend()
+plt.show()
+

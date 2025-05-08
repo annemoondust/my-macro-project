@@ -1,0 +1,23 @@
+
+import pandas as pd
+import pandas_datareader.data as web
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+import pandas_datareader as pdr
+import numpy as np
+
+start_date = '1955-01-01'
+end_date = '2022-01-01'
+
+gdp = web.DataReader('JPNRGDPEXP', 'fred', start_date, end_date)
+log_gdp = np.log(gdp)
+
+cycle, trend = sm.tsa.filters.hpfilter(log_gdp, lamb=1600)
+
+plt.plot(log_gdp, label="Original JPN GDP (in log)")
+
+plt.plot(trend, label="Trend")
+
+plt.legend()
+plt.show()
+
