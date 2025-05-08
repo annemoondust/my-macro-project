@@ -10,6 +10,7 @@ start_date = '1955-01-01'
 end_date = '2022-01-01'
 
 # download the data from FRED using pandas_datareader
+# GDPC1 means Real Gross GDP
 gdp = web.DataReader('GDPC1', 'fred', start_date, end_date)
 log_gdp = np.log(gdp)
 
