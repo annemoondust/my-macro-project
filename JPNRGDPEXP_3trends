@@ -20,6 +20,10 @@ plt.plot(trend_1600, label="Trend_1600")
 plt.plot(trend_100, label="Trend_100")
 plt.plot(trend_10, label="Trend_10")
 
+plt.title("Japan_trend")
+plt.xlabel("year")
+plt.ylabel("gdp")
+
 plt.legend()
 plt.show()
 
