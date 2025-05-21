@@ -6,10 +6,9 @@ import statsmodels.api as sm
 import pandas_datareader as pdr
 import numpy as np
 
-start_date = '1955-01-01'
-end_date = '2022-01-01'
+start_date = '1994-01-01'
 
-gdp = web.DataReader('JPNRGDPEXP', 'fred', start_date, end_date)
+gdp = web.DataReader('CLVMNACSCAB1GQDE', 'fred', start_date)
 log_gdp = np.log(gdp)
 
 cycle, trend_1600 = sm.tsa.filters.hpfilter(log_gdp, lamb=1600)
@@ -20,7 +19,7 @@ plt.plot(trend_1600, label="Trend_1600")
 plt.plot(trend_100, label="Trend_100")
 plt.plot(trend_10, label="Trend_10")
 
-plt.title("Japan_trend")
+plt.title("DEUTSCHLAND")
 plt.xlabel("year")
 plt.ylabel("gdp")
 
