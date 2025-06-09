@@ -1,0 +1,57 @@
+
+import pandas as pd
+import pandas_datareader.data as web
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+import pandas_datareader as pdr
+import numpy as np
+
+
+# サンプル期間を同じにする
+start_date = '1994-01-01'
+
+# 日本とドイツのデータを取得する（１）
+gdp_JPN = web.DataReader('JPNRGDPEXP', 'fred', start_date)
+gdp_DEU = web.DataReader('CLVMNACSCAB1GQDE', 'fred', start_date)
+
+# 対数変換する
+log_gdp_JPN = np.log(gdp_JPN)
+log_gdp_DEU = np.log(gdp_DEU)
+
+# HPフィルターを適用する（２、３）
+cycle_JPN, trend_JPN = sm.tsa.filters.hpfilter(log_gdp_JPN, lamb=1600)
+cycle_DEU, trend_DEU = sm.tsa.filters.hpfilter(log_gdp_DEU, lamb=1600)
+
+# 循環変動成分の標準偏差を計算する（４）
+ssr_JPN = 0
+ssr_DEU = 0
+ssr_JPN_DEU = 0
+cov_JPN_DEU = 0
+
+for data_JPN in cycle_JPN:
+    total_number = len(cycle_JPN) #データ総数
+    avg_JPN = sum(cycle_JPN) / total_number # 平均
+    re_JPN = (data_JPN - avg_JPN) #残差
+    sr_JPN = pow(re_JPN, 2) #残差二乗
+    ssr_JPN += sr_JPN #残差二乗和
+    sd_JPN = pow(ssr_JPN / total_number, 0.5) #標準偏差
+
+for data_DEU in cycle_DEU:
+    total_number = len(cycle_DEU)
+    avg_DEU = sum(cycle_DEU) / total_number
+    re_DEU = (data_DEU - avg_DEU) 
+    sr_DEU = pow(re_DEU, 2) 
+    ssr_DEU += sr_DEU 
+    sd_DEU = pow(ssr_DEU / total_number, 0.5)
+
+re_JPN = np.array(re_JPN)
+re_DEU = np.array(re_DEU)
+corr = np.corrcoef(re_JPN, re_DEU)[1, 0]
+
+print(re_JPN)
+print(re_DEU)
+print(corr)
+
+
+
+

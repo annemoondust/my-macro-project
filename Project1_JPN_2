@@ -24,7 +24,7 @@ plt.plot(cycle_10, label="cycle_10")
 
 plt.title("JAPAN_cycle")
 plt.xlabel("year")
-plt.ylabel("rate")
+plt.ylabel("gdp")
 
 plt.legend()
 plt.show()
