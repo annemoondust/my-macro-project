@@ -22,36 +22,32 @@ log_gdp_DEU = np.log(gdp_DEU)
 cycle_JPN, trend_JPN = sm.tsa.filters.hpfilter(log_gdp_JPN, lamb=1600)
 cycle_DEU, trend_DEU = sm.tsa.filters.hpfilter(log_gdp_DEU, lamb=1600)
 
-# 循環変動成分の標準偏差を計算する（４）
-ssr_JPN = 0
-ssr_DEU = 0
-ssr_JPN_DEU = 0
-cov_JPN_DEU = 0
+# 循環変動成分の標準偏差を計算する
+ #平均
+avg_JPN = sum(cycle_JPN) / len(cycle_JPN) 
+avg_DEU = sum(cycle_DEU) / len(cycle_DEU)
+ #残差リスト
+res_JPN = [i - avg_JPN for i in cycle_JPN]
+res_DEU = [j - avg_DEU for j in cycle_DEU]
+ #共分散
+cov = sum(rj * rd for rj, rd in zip(res_JPN, res_DEU)) / len(cycle_JPN) 
+ #標準偏差
+sd_JPN = (sum(rj**2 for rj in res_JPN) / len(cycle_JPN)) ** 0.5 
+sd_DEU = (sum(rd**2 for rd in res_DEU) / len(cycle_DEU)) ** 0.5
+ #相関係数
+corr = cov / (sd_JPN * sd_DEU) 
 
-for data_JPN in cycle_JPN:
-    total_number = len(cycle_JPN) #データ総数
-    avg_JPN = sum(cycle_JPN) / total_number # 平均
-    re_JPN = (data_JPN - avg_JPN) #残差
-    sr_JPN = pow(re_JPN, 2) #残差二乗
-    ssr_JPN += sr_JPN #残差二乗和
-    sd_JPN = pow(ssr_JPN / total_number, 0.5) #標準偏差
-
-for data_DEU in cycle_DEU:
-    total_number = len(cycle_DEU)
-    avg_DEU = sum(cycle_DEU) / total_number
-    re_DEU = (data_DEU - avg_DEU) 
-    sr_DEU = pow(re_DEU, 2) 
-    ssr_DEU += sr_DEU 
-    sd_DEU = pow(ssr_DEU / total_number, 0.5)
-
-re_JPN = np.array(re_JPN)
-re_DEU = np.array(re_DEU)
-corr = np.corrcoef(re_JPN, re_DEU)[1, 0]
-
-print(re_JPN)
-print(re_DEU)
+# 計算結果（４）
+print(sd_JPN)
+print(sd_DEU)
+print(cov)
 print(corr)
 
-
-
-
+# グラフをつくる（５）
+plt.plot(cycle_JPN, label="JPN")
+plt.plot(cycle_DEU, label="DEU")
+plt.title("Japan-Deutschland")
+plt.xlabel("year")
+plt.ylabel("cycle")
+plt.legend()
+plt.show()
